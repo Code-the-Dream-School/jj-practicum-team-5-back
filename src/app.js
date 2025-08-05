@@ -3,9 +3,12 @@ const app = express();
 const cors = require('cors')
 const favicon = require('express-favicon');
 const logger = require('morgan');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const mainRouter = require('./routes/mainRouter.js');
-
+const projectRoutes = require('./routes/projectRoutes.js');
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -16,5 +19,12 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // routes
 app.use('/api/v1', mainRouter);
+app.use("/api/projects", projectRoutes);
+
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.error(err));
+
 
 module.exports = app;
