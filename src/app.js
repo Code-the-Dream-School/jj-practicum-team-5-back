@@ -8,9 +8,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const mainRouter = require('./routes/mainRouter.js');
+const stepsRouter = require('./routes/stepsRouter.js');
 const projectRoutes = require('./routes/projectRoutes.js');
 // middleware
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
@@ -19,6 +19,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // routes
 app.use('/api/v1', mainRouter);
+app.use('/api/v1/steps', stepsRouter);
 app.use("/api/projects", projectRoutes);
 
 
