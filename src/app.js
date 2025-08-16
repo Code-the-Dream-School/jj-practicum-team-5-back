@@ -1,11 +1,13 @@
-const express = require('express');
-const app = express();
-const cors = require('cors')
-const favicon = require('express-favicon');
-const logger = require('morgan');
+import express from "express";
+import path from "path";
+import cors from "cors";
+import logger from "morgan";
 
-const mainRouter = require('./routes/mainRouter');
-const authRoutes = require('./routes/authRoutes');
+import mainRouter from "./routes/mainRouter.js";
+import authRoutes from "./routes/authRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
+
+const app = express();
 
 // middleware
 app.use(cors());
@@ -13,11 +15,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use(express.static('public'))
-app.use(favicon(__dirname + '/public/favicon.ico'));
+
 
 // routes
+app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
 app.use('/api/v1', mainRouter);
 app.use('/api/v1/authRoutes', authRoutes);
+app.use('/api/v1/projects', projectRoutes);
 
-module.exports = app;
-
+export default app;

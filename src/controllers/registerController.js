@@ -12,7 +12,13 @@ const registerUser = async (req, res) => {
 
   try {
 
-    const user = await userAuth.create({ first, last, email, password });
+    // const user = await userAuth.create({ first, last, email, password });
+    const user = await userAuth.create({
+      first: first,
+      last: last,
+      email: email,
+      password: password // pre-save хэширует
+    });
 
     return res
       .status(StatusCodes.CREATED)
