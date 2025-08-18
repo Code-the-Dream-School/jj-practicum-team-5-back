@@ -3,8 +3,8 @@ const Project = require("../models/Project");
 // Create a project
 exports.createProject = async (req, res) => {
     try {
-        const { name, description } = req.body;
-        const project = await Project.create({ name, description });
+        const { title, description, image, date, status } = req.body;
+        const project = await Project.create({ title, description, image, date, status  });
         res.status(201).json(project);
     } catch (err) {
         res.status(400).json({ error: err.message });
