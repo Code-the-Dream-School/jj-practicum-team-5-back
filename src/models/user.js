@@ -4,38 +4,44 @@ const jwt       = require('jsonwebtoken');
 const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
-    first:{
-        type:String,
-        required:[true, 'Please provide first name'],
-        minlength: 2,
-        maxLength: 25,
-    }, 
-    last:{
-         type:String,
-        require:[true, 'Please provide last name'],
-        minlength: 2,
-        maxLength: 25,
-    },
-    email: {
+  first: {
+    type: String,
+    required: [true, 'Please provide first name'],
+    minlength: [2, 'First name must be at least 2 characters'],
+    maxlength: [25, 'First name cannot exceed 25 characters'],
+    trim: true,
+    match: [/^[A-Za-z]+$/, 'First name can only contain letters']
+  },
+  last: {
+    type: String,
+    required: [true, 'Please provide last name'],
+    minlength: [2, 'Last name must be at least 2 characters'],
+    maxlength: [25, 'Last name cannot exceed 25 characters'],
+    trim: true,
+    match: [/^[A-Za-z]+$/, 'Last name can only contain letters']
+  },
+  email: {
     type: String,
     required: [true, 'Please provide email'],
-    unique: true,  
+    unique: true,
     lowercase: true,
     trim: true,
-    maxlength: 254,
+    maxlength: [254, 'Email cannot exceed 254 characters'],
     validate: {
       validator: (v) => validator.isEmail(v),
       message: props => `${props.value} is not a valid email!`
-   }
-    },
-    password:{
-        type:String,
-        require:[true, 'Please provide password'],
-        minLength:10,
-        match:[
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,}$/, 'Please provide valid password'
-        ],
-    },
+    }
+  },
+  password: {
+    type: String,
+    required: [true, 'Please provide a password'],
+    minLength: [10, 'Password must be at least 10 characters long'],
+    match: [
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{10,}$/,
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    ],
+  }
+  
 },
 {
   timestamps: true 
