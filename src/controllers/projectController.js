@@ -3,19 +3,18 @@ const Project = require("../models/Project");
 // Create a project
 exports.createProject = async (req, res) => {
     try {
-        const { title, description, image, date, status } = req.body;
-        const project = await Project.create({ title, description, image, date, status });
-        res.status(201).json({
-            success: true,
-            message: "Project created successfully",
-            data: project
+        const newProject = new Project({
+            title: req.body.title,
+            description: req.body.description,
+            status: req.body.status || "planned",
+            imageUrl: req.file ? "/uploads/" + req.file.filename : null,
+            date: req.body.date ? new Date(req.body.date) : new Date()
         });
+
+        await newProject.save();
+        res.json(newProject);
     } catch (err) {
-        console.error('Error creating project:', err);
-        res.status(400).json({
-            success: false,
-            error: err.message
-        });
+        res.status(500).json({ error: err.message });
     }
 };
 
