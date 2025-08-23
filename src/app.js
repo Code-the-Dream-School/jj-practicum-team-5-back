@@ -3,12 +3,10 @@ const app = express();
 const cors = require('cors')
 const favicon = require('express-favicon');
 const logger = require('morgan');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config();
 
-const mainRouter = require('./routes/mainRouter.js');
-const projectRoutes = require('./routes/projectRoutes.js');
+const mainRouter = require('./routes/mainRouter');
+const authRoutes = require('./routes/authRoutes');
+
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -19,16 +17,12 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // routes
 app.use('/api/v1', mainRouter);
-app.use("/api/v1/projects", projectRoutes);
-
+app.use('/api/v1/authRoutes', authRoutes);
+app.use('/api/v1/projects', projectRouter);
 
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
 });
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB connected"))
-    .catch(err => console.error(err));
-
-
 module.exports = app;
+
