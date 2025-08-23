@@ -19,8 +19,12 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // routes
 app.use('/api/v1', mainRouter);
-app.use("/api/projects", projectRoutes);
+app.use("/api/v1/projects", projectRoutes);
 
+
+app.use((req, res) => {
+    res.status(404).json({ message: "Route not found" });
+});
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB connected"))
