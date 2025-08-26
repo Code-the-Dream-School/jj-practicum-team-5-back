@@ -1,13 +1,10 @@
-// src/controllers/step.controller.js
+
 const mongoose = require('mongoose');
 const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../errors');
 const Step = require('../models/Step');
 
-/**
- * GET /projects/:projectId/steps
- * Return all steps for a given project, sorted by 'order' ascending
- */
+ 
 const getAllStepsByProject = async (req, res) => {
   const { projectId } = req.params;
 
@@ -19,11 +16,7 @@ const getAllStepsByProject = async (req, res) => {
   const steps = await Step.find({ projectId }).sort('order');
   res.status(StatusCodes.OK).json({ steps, count: steps.length });
 };
-
-/**
- * GET /steps/:id
- * Return a single step by its id
- */
+ 
 const getStep = async (req, res) => {
   const { id: stepId } = req.params;
 
@@ -38,13 +31,7 @@ const getStep = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ step });
 };
-
-/**
- * POST /projects/:projectId/steps
- * Create a new step
- * - If 'order' is provided: shift all steps with order >= given 'order' by +1
- * - If 'order' is not provided: place the step at the end (max(order)+1 or 1)
- */
+ 
 const createStep = async (req, res) => {
   const { projectId } = req.params;
   const { name, description = '', status, order } = req.body;
@@ -150,12 +137,7 @@ const updateStep = async (req, res) => {
   await step.save();
   res.status(StatusCodes.OK).json({ step });
 };
-
-/**
- * DELETE /steps/:id
- * Delete a step and compact orders:
- *  - Decrement (-1) the order of all steps with order > deleted.order
- */
+ 
 const deleteStep = async (req, res) => {
   const { id: stepId } = req.params;
 

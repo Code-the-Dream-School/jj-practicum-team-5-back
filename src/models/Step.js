@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const SubStepSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    done:  { type: Boolean, default: false },
+  },
+  { _id: true, timestamps: true }
+);
+
 const StepSchema = new mongoose.Schema(
   { 
     projectId: { type: mongoose.Schema.Types.ObjectId, required: true, index: true },
@@ -13,7 +21,9 @@ const StepSchema = new mongoose.Schema(
       default: 'Not Started'
     },
 
-    order: { type: Number, required: true, min: 1, index: true }
+    order: { type: Number, required: true, min: 1, index: true },
+
+    subSteps: [SubStepSchema]
   },
   { timestamps: true }
 );
