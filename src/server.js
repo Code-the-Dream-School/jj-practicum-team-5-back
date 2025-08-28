@@ -1,3 +1,4 @@
+
 require('dotenv').config();           
 const mongoose = require('mongoose');
 const app = require('./app');
@@ -25,4 +26,3 @@ const start = async () => {
 };
 
 start();
-
