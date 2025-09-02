@@ -20,6 +20,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 // routes
 app.use('/api/v1', mainRouter);
 app.use('/api/v1/steps', stepsRouter);
+app.use('/uploads', express.static('uploads'));
 app.use("/api/projects", projectRoutes);
 
 
