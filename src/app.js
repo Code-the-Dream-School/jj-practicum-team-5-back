@@ -30,10 +30,12 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // routes
 app.use('/api/v1', mainRouter);
+
 app.use('/api/v1/steps', stepsRouter);
 app.use("/api/projects", projectRoutes);
 app.use('/api/v1/auth', authRoutes);         
 app.use('/api/v1/projects', projectRoutes);
+
 
 
 // upload route
