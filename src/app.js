@@ -11,14 +11,14 @@ const photoUpload = require("./middlewares/photoUpload");
 
 dotenv.config();
 
-
+// routes
 const mainRouter = require('./routes/mainRouter');
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const stepsRouter = require('./routes/stepsRouter.js');
 
 
 // middleware
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
@@ -30,23 +30,31 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // routes
 app.use('/api/v1', mainRouter);
-app.use('/api/v1/authRoutes', authRoutes);
-app.use("/api/v1/projects", projectRoutes);
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB connected"))
-    .catch(err => console.error("MongoDB connection error:", err));
+app.use('/api/v1/steps', stepsRouter);
+app.use("/api/projects", projectRoutes);
+app.use('/api/v1/auth', authRoutes);         
+app.use('/api/v1/projects', projectRoutes);
+
+
 
 // upload route
 app.post("/api/upload", photoUpload.single("image"), (req, res) => {
-    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-    res.json({ url: `/uploads/${req.file.filename}` });
+  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  res.json({ url: `/uploads/${req.file.filename}` });
 });
 
+// 404
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error(err));
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
 module.exports = app;
