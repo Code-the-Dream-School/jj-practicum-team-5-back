@@ -31,7 +31,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // routes
 app.use('/api/v1', mainRouter);
 app.use('/api/v1/authRoutes', authRoutes);
-app.use("/api/projects", projectRoutes);
+app.use("/api/v1/projects", projectRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
