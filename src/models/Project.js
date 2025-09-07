@@ -8,15 +8,15 @@ const stepSchema = new mongoose.Schema({
 
 const projectSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, default: "" },
     status: {
         type: String,
         enum: ['Not started', 'In Progress', 'Completed', 'Overdue'],
         default: 'Not started'
     },
-    date: { type: String, required: true },
-    image: { type: String },
-    steps: [stepSchema]
+    date: { type: String, required: true  },
+    image: { type: String, default: null },
+    steps: { type: [stepSchema], default: [] }
 }, {
     timestamps: true
 });
