@@ -1,17 +1,25 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+
+const stepSchema = new mongoose.Schema({
+    id: { type: Number, required: true },
+    title: { type: String, required: true },
+    completed: { type: Boolean, default: false }
+});
 
 const projectSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    description: { type: String },
-    image: { type: String },
-    date: { type: Date, default: Date.now },
+    description: { type: String, default: "" },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     status: {
         type: String,
-        enum: ["Completed", "In Progress", "Not started", "Overdue"],
-        default: "Not started"
+        enum: ['Not started', 'In Progress', 'Completed', 'Overdue'],
+        default: 'Not started'
     },
+    date: { type: String, required: true  },
+    image: { type: String, default: null },
+    steps: { type: [stepSchema], default: [] }
+}, {
+    timestamps: true
 });
 
-const Project = mongoose.model("Project", projectSchema);
-
-module.exports = Project;
+module.exports = mongoose.model('Project', projectSchema);
