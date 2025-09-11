@@ -1,25 +1,32 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
+// Define schema for individual steps inside a project
 const stepSchema = new mongoose.Schema({
-    id: { type: Number, required: true },
-    title: { type: String, required: true },
-    completed: { type: Boolean, default: false }
+  id: { type: Number, required: true }, // local numeric ID for ordering steps
+  title: { type: String, required: true }, // step title
+  completed: { type: Boolean, default: false }, // status flag
+  dueDate: { type: Date, default: null }, // ✅ added a due date for each step
 });
 
-const projectSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String, default: "" },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+// Define schema for projects
+const projectSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true }, // project title
+    description: { type: String, default: "" }, // optional description
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // link to user
     status: {
-        type: String,
-        enum: ['Not started', 'In Progress', 'Completed', 'Overdue'],
-        default: 'Not started'
+      type: String,
+      enum: ["Not started", "In Progress", "Completed", "Overdue"],
+      default: "Not started",
     },
-    date: { type: String, required: true  },
-    image: { type: String, default: null },
-    steps: { type: [stepSchema], default: [] }
-}, {
-    timestamps: true
-});
+    dueDate: { type: Date, required: true }, // ✅ renamed from "date" → "dueDate"
+    image: { type: String, default: null }, // optional image path
+    steps: { type: [stepSchema], default: [] }, // array of step objects
+  },
+  {
+    timestamps: true, // automatically add createdAt and updatedAt
+  }
+);
 
-module.exports = mongoose.model('Project', projectSchema);
+// Export the model
+module.exports = mongoose.model("Project", projectSchema);
