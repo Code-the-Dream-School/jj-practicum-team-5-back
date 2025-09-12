@@ -1,25 +1,40 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const stepSchema = new mongoose.Schema({
-    id: { type: Number, required: true },
-    title: { type: String, required: true },
-    completed: { type: Boolean, default: false }
+// Subtask schema
+const subtaskSchema = new mongoose.Schema({
+  id: { type: Number, required: true },
+  title: { type: String, required: true },
+  done: { type: Boolean, default: false },
 });
 
-const projectSchema = new mongoose.Schema({
+// Step schema
+const stepSchema = new mongoose.Schema({
+  id: { type: Number, required: true },
+  title: { type: String, required: true },
+  description: { type: String, default: "" },
+  completed: { type: Boolean, default: false },
+  dueDate: { type: Date, default: null },
+  subtasks: { type: [subtaskSchema], default: [] }, // ✅ added subtasks
+});
+
+// Project schema
+const projectSchema = new mongoose.Schema(
+  {
     title: { type: String, required: true },
     description: { type: String, default: "" },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     status: {
-        type: String,
-        enum: ['Not started', 'In Progress', 'Completed', 'Overdue'],
-        default: 'Not started'
+      type: String,
+      enum: ["Not started", "In Progress", "Completed", "Overdue"],
+      default: "Not started",
     },
-    date: { type: String, required: true  },
+    dueDate: { type: Date, required: true }, // ✅ renamed from "date"
     image: { type: String, default: null },
-    steps: { type: [stepSchema], default: [] }
-}, {
-    timestamps: true
-});
+    steps: { type: [stepSchema], default: [] },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model('Project', projectSchema);
+module.exports = mongoose.model("Project", projectSchema);
