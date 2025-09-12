@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const app = express();
 
 const cors = require("cors");
@@ -37,7 +37,6 @@ app.use("/api/v1/steps", stepsRouter);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/auth", authRoutes);
 
-
 // upload route
 app.post("/api/upload", photoUpload.single("image"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
@@ -55,6 +54,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
+  .then(() => console.log(process.env.MONGO_URI))
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
