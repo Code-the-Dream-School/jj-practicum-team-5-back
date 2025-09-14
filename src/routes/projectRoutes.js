@@ -81,8 +81,14 @@ router.post("/", upload.single("image"), async (req, res) => {
       parsedSteps = JSON.parse(steps).map((s, idx) => ({
         id: idx + 1,
         title: s.title || "",
+        description: s.description || "",
         completed: false,
-        dueDate: s.dueDate || null, // ✅ allow dueDate for steps
+        dueDate: s.dueDate || null,
+        subtasks: (s.subtasks || []).map((t, tidx) => ({
+          id: tidx + 1,
+          title: t.title || "",
+          done: !!t.done,
+        })),
       }));
     } catch {
       parsedSteps = [];
@@ -92,7 +98,7 @@ router.post("/", upload.single("image"), async (req, res) => {
       title: title.trim(),
       description: description.trim(),
       userId: req.user._id,
-      dueDate, // ✅ renamed from "date" to "dueDate"
+      dueDate, // must match schema
       steps: parsedSteps,
       image: req.file ? `/uploads/${req.file.filename}` : null,
     });
@@ -108,10 +114,20 @@ router.post("/", upload.single("image"), async (req, res) => {
 // UPDATE project
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
-    const updateData = { ...req.body };
+    let updateData = { ...req.body };
 
+    // Handle file upload
     if (req.file) {
       updateData.image = `/uploads/${req.file.filename}`;
+    }
+
+    // If steps are sent as JSON string → parse them
+    if (typeof updateData.steps === "string") {
+      try {
+        updateData.steps = JSON.parse(updateData.steps);
+      } catch {
+        updateData.steps = [];
+      }
     }
 
     const project = await Project.findOneAndUpdate(
