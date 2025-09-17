@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
             first,
             last,
             email,
-            password: hashedPassword
+            password
         });
 
         const token = jwt.sign(
