@@ -67,7 +67,7 @@ router.post('/check-email', async (req, res) => {
 
         return res.json({ exists: false });
     } catch (err) {
-        console.error("Registration error:", err);
+        console.error(err);
         return res.status(500).json({ error: 'Server error' });
     }
 });
