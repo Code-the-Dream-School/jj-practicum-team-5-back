@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
             first,
             last,
             email,
-            password: hashedPassword
+            password
         });
 
         const token = jwt.sign(
@@ -67,7 +67,7 @@ router.post('/check-email', async (req, res) => {
 
         return res.json({ exists: false });
     } catch (err) {
-        console.error(err);
+        console.error("Registration error:", err);
         return res.status(500).json({ error: 'Server error' });
     }
 });
