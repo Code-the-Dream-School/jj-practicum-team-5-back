@@ -13,84 +13,76 @@ The app includes authentication, project management, step/sub-step CRUD operatio
 
 🛠️ Technology Used
 
-Backend: Node.js, Express.js, Mongoose (MongoDB)
+Node.js + Express.js – REST API framework
 
-Database: MongoDB Atlas
+MongoDB + Mongoose – Database and schema modeling
 
-Authentication: JWT-based auth
+JWT (jsonwebtoken) – Authentication and authorization
 
-Other: Multer for image upload, dotenv, morgan, cors
+bcryptjs – Password hashing
 
-Frontend (planned/optional): React
+Multer – File/image upload middleware
+
+dotenv – Environment variable management
+
+morgan – Logging middleware
+
+cors – Cross-Origin Resource Sharing
 
 🔗 API Routes
-Authentication
+Auth Routes (/api/v1/auth)
+POST /register → Register new user
+POST /login → Login user and return JWT
+POST /check-email → Check if email exists
 
-POST /api/v1/auth/register → Register new user
+Project Routes (/api/v1/projects)
+POST / → Create new project (with image upload)
+GET / → Get all projects
+GET /:id → Get project by ID
+PUT /:id → Update project (with optional new image)
+DELETE /:id → Delete project
 
-POST /api/v1/auth/login → Login user
+Step Routes (/api/v1/steps)
+POST /projects/:projectId → Create step for project
+GET /projects/:projectId → Get all steps of a project
+PATCH /:id → Update step
+DELETE /:id → Delete step
 
-POST /api/v1/auth/logout → Logout
-
-Projects
-
-GET /api/v1/projects → Get all projects
-
-POST /api/v1/projects → Create new project (with image + initial steps)
-
-GET /api/v1/projects/:id → Get project by ID
-
-PATCH /api/v1/projects/:id → Update project
-
-DELETE /api/v1/projects/:id → Delete project (and related steps)
-
-Steps
-
-GET /api/v1/steps/projects/:projectId → List steps for a project
-
-POST /api/v1/steps/projects/:projectId → Create a new step
-
-PATCH /api/v1/steps/:id → Update a step
-
-DELETE /api/v1/steps/:id → Delete a step
+Uploads
+POST /api/upload → Upload image (returns filename)
+GET /uploads/:filename → Serve uploaded image
 
 Sub-steps
-
 GET /api/v1/steps/:stepId/substeps → List sub-steps of a step
-
 POST /api/v1/steps/:stepId/substeps → Create sub-step
-
 PATCH /api/v1/steps/:stepId/substeps/:subId → Update sub-step
-
 DELETE /api/v1/steps/:stepId/substeps/:subId → Delete sub-step
 
 🗄️ Database Schema
-Project
-{
-title: String,
-deadline: Date,
-description: String,
-imageFilename: String,
-}
+User Schema (models/user.js):
+first: String, required, only letters
+last: String, required, only letters
+email: String, required, unique, validated with validator
+password: String, hashed with bcrypt, min length 10, must include uppercase, lowercase, number, and special char
+Methods:
+createJWT() – generates JWT
+comparePassword() – compares hashed password
+
+Project Schema (models/Project.js):
+title: String, required
+description: String, required
+status: Enum – Not started, In Progress, Completed, Overdue
+date: String, required (deadline/date)
+image: String (filename, with UUID added)
+steps: Array of stepSchema
 
 Step
-{
 projectId: ObjectId (ref: Project),
 name: String,
 description: String,
 status: "Not Started" | "In Progress" | "Completed",
 order: Number,
 subSteps: [ { title: String, done: Boolean } ],
-}
-
-User
-{
-username: String,
-email: String,
-password: String (hashed),
-createdAt: Date,
-updatedAt: Date
-}
 
 ⚙️ Setup Instructions
 
