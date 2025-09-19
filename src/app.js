@@ -6,6 +6,7 @@ const favicon = require("express-favicon");
 const logger = require("morgan");
 const dotenv = require("dotenv");
 const photoUpload = require("./middlewares/photoUpload");
+const mongoose = require("mongoose");
 
 dotenv.config();
 
@@ -50,7 +51,6 @@ app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-
 // MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -59,6 +59,5 @@ mongoose
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
-
 
 module.exports = app;
