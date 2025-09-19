@@ -1,30 +1,117 @@
-# Back-End Repo for Node/React Practicum
+📌 Project Name
 
-This will be the API for the front-end React app part of your practicum project.
+Project Planning Application
 
-These instructions are for the **front-end team** so they can setup their local development environment to run 
-both the back-end server and their front-end app. You can go through these steps during your first group meeting 
-in case you need assistance from your mentors.
+📝 Description
 
->The back-end server will be running on port 8000. The front-end app will be running on port 3000. You will need to run both the back-end server and the front-end app at the same time to test your app.
+This is a web-based project planning tool that helps users create projects, break them down into steps and sub-steps, and track progress visually.
+The app includes authentication, project management, step/sub-step CRUD operations, progress tracking, and timeline visualization.
 
-### Setting up local development environment
+🎥 Demo
 
-1. Create a folder to contain both the front-end and back-end repos 
-2. Clone this repository to that folder
-3. Run `npm install` to install dependencies
-4. Pull the latest version of the `main` branch (when needed)
-5. Run `npm run dev` to start the development server
-6. Open http://localhost:8000/api/v1/ with your browser to test.
-7. Your back-end server is now running. You can now run the front-end app.
+(Add screenshots or a short GIF here showing the dashboard, creating a project, and step management.)
 
-#### Running the back-end server in Visual Studio Code
+🛠️ Technology Used
 
-Note: In the below example, the group's front-end repository was named `bb-practicum-team1-front` and the back-end repository was named `bb-practicum-team-1-back`. Your repository will have a different name, but the rest should look the same.
-![vsc running](images/back-end-running-vsc.png)
+Backend: Node.js, Express.js, Mongoose (MongoDB)
 
-#### Testing the back-end server API in the browser
+Database: MongoDB Atlas
 
-![browser server](images/back-end-running-browser.png)
+Authentication: JWT-based auth
 
->Update the .node-version file to match the version of Node.js the **team** is using. This is used by Render.com to [deploy the app](https://render.com/docs/node-version).
+Other: Multer for image upload, dotenv, morgan, cors
+
+Frontend (planned/optional): React
+
+🔗 API Routes
+Authentication
+
+POST /api/v1/auth/register → Register new user
+
+POST /api/v1/auth/login → Login user
+
+POST /api/v1/auth/logout → Logout
+
+Projects
+
+GET /api/v1/projects → Get all projects
+
+POST /api/v1/projects → Create new project (with image + initial steps)
+
+GET /api/v1/projects/:id → Get project by ID
+
+PATCH /api/v1/projects/:id → Update project
+
+DELETE /api/v1/projects/:id → Delete project (and related steps)
+
+Steps
+
+GET /api/v1/steps/projects/:projectId → List steps for a project
+
+POST /api/v1/steps/projects/:projectId → Create a new step
+
+PATCH /api/v1/steps/:id → Update a step
+
+DELETE /api/v1/steps/:id → Delete a step
+
+Sub-steps
+
+GET /api/v1/steps/:stepId/substeps → List sub-steps of a step
+
+POST /api/v1/steps/:stepId/substeps → Create sub-step
+
+PATCH /api/v1/steps/:stepId/substeps/:subId → Update sub-step
+
+DELETE /api/v1/steps/:stepId/substeps/:subId → Delete sub-step
+
+🗄️ Database Schema
+Project
+{
+title: String,
+deadline: Date,
+description: String,
+imageFilename: String,
+}
+
+Step
+{
+projectId: ObjectId (ref: Project),
+name: String,
+description: String,
+status: "Not Started" | "In Progress" | "Completed",
+order: Number,
+subSteps: [ { title: String, done: Boolean } ],
+}
+
+User
+{
+username: String,
+email: String,
+password: String (hashed),
+createdAt: Date,
+updatedAt: Date
+}
+
+⚙️ Setup Instructions
+
+Clone the repo
+
+git clone <repo-url>
+cd backend
+
+Install dependencies
+
+npm install
+
+Add environment variables
+Create a .env file in the root:
+
+PORT=8000
+MONGODB_URI=your-mongodb-connection-string
+JWT_SECRET=your-secret
+
+Run the server
+
+npm run dev
+
+Test with Postman or connect the frontend.
