@@ -50,4 +50,15 @@ app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
+
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+
 module.exports = app;

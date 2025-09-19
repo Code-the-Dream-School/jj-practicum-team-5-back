@@ -1,5 +1,5 @@
 
-require('dotenv').config();           
+require('dotenv').config();
 const mongoose = require('mongoose');
 const app = require('./app');
 
@@ -16,7 +16,7 @@ const start = async () => {
     });
     console.log('Connected to MongoDB');
 
-    app.listen(PORT, () => {
+    app.listen(PORT,"0.0.0.0", () => {
       console.log(`Server is listening on port: ${PORT}`);
     });
   } catch (err) {
