@@ -167,7 +167,19 @@ router.delete("/:id", async (req, res) => {
         .json({ success: false, message: "Project not found" });
     }
 
-    res.json({ success: true, message: "Project deleted successfully" });
+    if (project.image) {
+      const imagePath = path.join(__dirname, "..", project.image);
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.warn("Could not delete image file:", err.message);
+        }
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Project deleted successfully",
+    });
   } catch (err) {
     console.error("Error in DELETE /projects/:id:", err);
     res.status(500).json({
