@@ -1,30 +1,124 @@
-# Back-End Repo for Node/React Practicum
+# MycelFlow Backend
 
-This will be the API for the front-end React app part of your practicum project.
+## Description
 
-These instructions are for the **front-end team** so they can setup their local development environment to run 
-both the back-end server and their front-end app. You can go through these steps during your first group meeting 
-in case you need assistance from your mentors.
+This is the backend API for MycelFlow, a modern event project management platform. It provides RESTful endpoints for user authentication, project and step management, and file uploads. The backend is built with Node.js, Express, and MongoDB, supporting features like project deadlines, step tracking, and user authentication.
 
->The back-end server will be running on port 8000. The front-end app will be running on port 3000. You will need to run both the back-end server and the front-end app at the same time to test your app.
+## Demo (Screenshots)
 
-### Setting up local development environment
+- Visual Studio Code running backend:  
+  ![Backend in VSCode](images/back-end-running-vsc.png)
+- API running in browser:  
+  ![Backend in Browser](images/back-end-running-browser.png)
 
-1. Create a folder to contain both the front-end and back-end repos 
-2. Clone this repository to that folder
-3. Run `npm install` to install dependencies
-4. Pull the latest version of the `main` branch (when needed)
-5. Run `npm run dev` to start the development server
-6. Open http://localhost:8000/api/v1/ with your browser to test.
-7. Your back-end server is now running. You can now run the front-end app.
+## Technology Used
 
-#### Running the back-end server in Visual Studio Code
+- **Node.js** (JavaScript runtime)
+- **Express.js** (Web framework)
+- **MongoDB** (Database)
+- **Mongoose** (ODM for MongoDB)
+- **JWT** (Authentication)
+- **Multer** (File uploads)
+- **dotenv** (Environment variables)
+- **CORS**, **Morgan**, **Cookie-Parser** (Middleware)
 
-Note: In the below example, the group's front-end repository was named `bb-practicum-team1-front` and the back-end repository was named `bb-practicum-team-1-back`. Your repository will have a different name, but the rest should look the same.
-![vsc running](images/back-end-running-vsc.png)
+## API Routes
 
-#### Testing the back-end server API in the browser
+### Auth Routes
 
-![browser server](images/back-end-running-browser.png)
+- `POST /api/v1/auth`  
+  Register a new user
 
->Update the .node-version file to match the version of Node.js the **team** is using. This is used by Render.com to [deploy the app](https://render.com/docs/node-version).
+- `POST /api/v1/auth/loginUser`  
+  Login existing user
+
+- `POST /api/v1/auth/check-email`  
+  Check if email exists
+
+### Project Routes
+
+- `GET /api/v1/projects`  
+  Get all projects for authenticated user
+
+- `GET /api/v1/projects/:id`  
+  Get a single project by ID
+
+- `POST /api/v1/projects`  
+  Create a new project (supports image upload)
+
+- `PUT /api/v1/projects/:id`  
+  Update a project
+
+- `DELETE /api/v1/projects/:id`  
+  Delete a project
+
+- `POST /api/v1/projects/:id/image`  
+  Upload/update project image
+
+### Step Routes
+
+- `POST /api/v1/projects/:projectId/steps`  
+  Add a step to a project
+
+## Database Schema
+
+### Project
+
+- `title`: String, required
+- `description`: String
+- `userId`: ObjectId (ref: User)
+- `status`: String (`Not started`, `In Progress`, `Completed`, `Overdue`)
+- `dueDate`: Date, required
+- `image`: String (file path)
+- `steps`: Array of Step subdocuments
+
+### Step (Subdocument)
+
+- `id`: Number, required
+- `title`: String, required
+- `description`: String
+- `completed`: Boolean
+- `dueDate`: Date
+- `subtasks`: Array of Subtask subdocuments
+
+### Subtask (Subdocument)
+
+- `id`: Number, required
+- `title`: String, required
+- `done`: Boolean
+
+## Setup Instructions
+
+1. **Clone the repository**
+
+   ```sh
+   git clone git@github.com:Code-the-Dream-School/jj-practicum-team-5-back.git
+   cd jj-practicum-team-5-back
+   ```
+
+2. **Install dependencies**
+
+   ```sh
+   npm install
+   ```
+
+3. **Configure environment**
+
+   - Create a `.env` file:
+     ```
+     MONGO_URI=mongodb://localhost:27017/mycelflow
+     JWT_SECRET=your_jwt_secret
+     ```
+
+4. **Run the development server**
+
+   ```sh
+   npm run dev
+   ```
+
+5. **Test the API**
+   - Visit [http://localhost:8000/api/v1/](http://localhost:8000/api/v1/) in your browser.
+
+---
+
+For more details, see [documentation/mongoose_schema_standards.md](../documentation/mongoose_schema_standards.md) and the [README.md](../README.md) in this repo.
